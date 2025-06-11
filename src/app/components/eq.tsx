@@ -1,3 +1,4 @@
+'use client'
 import { useRef, useEffect, useState } from "react"
 
 const GRID_SPACING = 4
@@ -29,8 +30,11 @@ export const Visualizer = () => {
 	}
 
 	const audioRef = useRef<HTMLAudioElement>(null)
-	let audioEle: HTMLAudioElement = new Audio("/yugioh.mp3")
-	audioEle.preload = "metadata"
+	let audioEle: HTMLAudioElement
+	useEffect(() => {
+		audioEle = new Audio("/yugioh.mp3")
+		audioEle.preload = "metadata"
+	}, [])
 
 	// useEffect(() => {
 	// 	if (!audioEle) audioEle = new Audio("/yugioh.mp3")
