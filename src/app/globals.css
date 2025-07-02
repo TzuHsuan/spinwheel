@@ -49,6 +49,6 @@ body {
   transform: translateX(var(--index));
 }
 
-.panel {
-  transform: rotate(--rotation);
+.stack {
+  grid-area: 1/1;
 }

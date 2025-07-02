@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 type entry = {
 	id: string,
@@ -14,46 +14,59 @@ export const Roulette = ({ entries }: { entries: entry[] }) => {
 		setSelected(entries[randomIndex]);
 	};
 
-	const [rotation, setRotation] = useState(0);
-	const [force, setForce] = useState(0);
-	const [friciton, setFriction] = useState(0);
+	const [wheel, setWheel] = useState({ rotation: 0, force: 0 });
+	const FRICTION = 0.99; // Friction factor to slow down the wheel
+	const requestRef = React.useRef(0);
 
 	const spin = () => {
-		setForce(10 + Math.random() * 20)
-		setFriction(0.99); // Simulate friction
-		requestAnimationFrame(spin);
+		if (requestRef.current === 0) {
+			setWheel(prev => { return { ...prev, force: 10 + Math.random() * 20 } }); // Simulate friction
+			requestRef.current = requestAnimationFrame(spin);
+		} else {
+			setWheel(prev => {
+				console.log(prev)
+				console.log(requestRef.current)
+				if (prev.force < 0.1) {
+					cancelAnimationFrame(requestRef.current);
+					requestRef.current = 0;
+					return { force: 0, rotation: prev.rotation };
+				}
+				return {
+					force: prev.force * FRICTION, // Apply friction
+					rotation: (prev.rotation + prev.force) % 360
+				};
+			})
+			if (requestRef.current !== 0) {
+				console.log('requesting animation frame', requestRef.current);
+				requestRef.current = requestAnimationFrame(spin);
+			}
+		}
 	}
 
 	const animate = () => {
-		setRotation(prev => (prev + force / 10) % 360);
-		setForce(prev => prev * friciton);
-		if (force < 0.1) {
-			setForce(0);
-			setFriction(0);
-			// Optionally, select a random entry here
-			selectRandomEntry();
-		} else {
-			requestAnimationFrame(animate);
-		}
 	}
+
+	useEffect(() => {
+		return () => {
+			cancelAnimationFrame(requestRef.current);
+			requestRef.current = 0;
+		};
+	}, []);
 
 	const start = () => {
 		requestAnimationFrame(spin);
 	}
 
 	return (
-		/*
-		<div className="flex flex-col items-center">
-			<button onClick={selectRandomEntry} className="bg-blue-500 text-white px-4 py-2 rounded-sm">Spin the Wheel</button>
-			{selected && <div className="mt-4 text-lg">Selected: {selected.name || selected.id}</div>}
-		</div>
-		*/
-		<div className="perspective-origin-center perspective-distant">
-			<div className="border-2 grid place-items-center h-16 w-64" style={{ transform: `translateZ(100px) rotateX(${rotation - 32}deg)` }}>1</div>
-			<div className="border-2 grid place-items-center h-16 w-64" style={{ transform: `rotateX(${rotation - 16}deg)` }}>2</div>
-			<div className="border-2 grid place-items-center h-16 w-64" style={{ transform: `rotateX(${rotation}deg)` }}>3</div>
-			<div className="border-2 grid place-items-center h-16 w-64" style={{ transform: `rotateX(${rotation + 16}deg)` }}>4</div>
-			<div className="border-2 grid place-items-center h-16 w-64" style={{ transform: `rotateX(${rotation + 32}deg)` }}>5</div>
-		</div>
+		<>
+			<div className="h-[16rem] w-lg perspective-origin-center perspective-distant grid place-content-center overflow-hidden inset-shadow-sm">
+				<div className="border-2 grid place-items-center h-16 w-[24rem] stack" style={{ transform: `rotateX(${wheel.rotation + 32}deg) translateZ(220px) ` }}>1</div>
+				<div className="border-2 grid place-items-center h-16 w-[24rem] stack" style={{ transform: `rotatex(${wheel.rotation + 16}deg) translatez(220px) ` }}>2</div>
+				<div className="border-2 grid place-items-center h-16 w-[24rem] stack" style={{ transform: `rotateX(${wheel.rotation}deg) translateZ(220px) ` }}>3</div>
+				<div className="border-2 grid place-items-center h-16 w-[24rem] stack" style={{ transform: `rotateX(${wheel.rotation - 16}deg) translateZ(220px) ` }}>4</div>
+				<div className="border-2 grid place-items-center h-16 w-[24rem] stack" style={{ transform: `rotateX(${wheel.rotation - 32}deg) translateZ(220px) ` }}>5</div>
+			</div>
+			<button className="mt-4 p-2 bg-blue-500 text-white rounded" onClick={start}> Spin</button>
+		</>
 	);
 }
