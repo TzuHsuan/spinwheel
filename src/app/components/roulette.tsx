@@ -44,7 +44,7 @@ export const Roulette = ({ entries }: { entries: entry[] }) => {
 	return (
 		/*
 		<div className="flex flex-col items-center">
-			<button onClick={selectRandomEntry} className="bg-blue-500 text-white px-4 py-2 rounded">Spin the Wheel</button>
+			<button onClick={selectRandomEntry} className="bg-blue-500 text-white px-4 py-2 rounded-sm">Spin the Wheel</button>
 			{selected && <div className="mt-4 text-lg">Selected: {selected.name || selected.id}</div>}
 		</div>
 		*/
