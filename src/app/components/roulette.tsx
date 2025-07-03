@@ -14,57 +14,63 @@ export const Roulette = ({ entries }: { entries: entry[] }) => {
 		setSelected(entries[randomIndex]);
 	};
 
-	const [wheel, setWheel] = useState({ rotation: 0, force: 0 });
+	const [rotation, setRotation] = useState(0);
 	const FRICTION = 0.99; // Friction factor to slow down the wheel
 	const requestRef = React.useRef(0);
+	let startTime = 0;
+	let duration = 0;
+	let maxSpeed = 0;
 
-	const spin = () => {
-		if (requestRef.current === 0) {
-			setWheel(prev => { return { ...prev, force: 10 + Math.random() * 20 } }); // Simulate friction
-			requestRef.current = requestAnimationFrame(spin);
-		} else {
-			setWheel(prev => {
-				console.log(prev)
-				console.log(requestRef.current)
-				if (prev.force < 0.1) {
-					cancelAnimationFrame(requestRef.current);
-					requestRef.current = 0;
-					return { force: 0, rotation: prev.rotation };
-				}
-				return {
-					force: prev.force * FRICTION, // Apply friction
-					rotation: (prev.rotation + prev.force) % 360
-				};
-			})
-			if (requestRef.current !== 0) {
-				console.log('requesting animation frame', requestRef.current);
-				requestRef.current = requestAnimationFrame(spin);
-			}
+	//progress should be between 0 and 1
+	const spinSpeed = (progress: number) => {
+		if (progress < 0 || progress > 1) {
+			throw new Error("Progress must be between 0 and 1");
 		}
+		if (progress < .2) {
+			return maxSpeed * Math.sin((progress / .2) * Math.PI / 2);
+		}
+		if (progress > .7) {
+			return maxSpeed * (Math.sin(((progress - .7) / .15) * Math.PI / 2 + Math.PI / 2) / 2 + .5);
+		}
+		return maxSpeed;
 	}
 
-	const animate = () => {
+	const spin = (timestamp: number) => {
+		if (startTime === 0) {
+			startTime = timestamp;
+			requestRef.current = requestAnimationFrame(spin);
+		} else {
+			let elapsed = timestamp - startTime;
+			if (elapsed > duration) {
+				startTime = 0;
+				// pick winner
+				return;
+			}
+			setRotation(prev => { return (prev + spinSpeed(elapsed / duration)) % 360 });
+			requestRef.current = requestAnimationFrame(spin);
+		}
 	}
 
 	useEffect(() => {
 		return () => {
 			cancelAnimationFrame(requestRef.current);
-			requestRef.current = 0;
 		};
 	}, []);
 
 	const start = () => {
+		duration = 5000
+		maxSpeed = 10 + Math.random() * duration / 1000; // Maximum speed of the wheel
 		requestAnimationFrame(spin);
 	}
 
 	return (
 		<>
 			<div className="h-[16rem] w-lg perspective-origin-center perspective-distant grid place-content-center overflow-hidden inset-shadow-sm">
-				<div className="border-2 grid place-items-center h-16 w-[24rem] stack" style={{ transform: `rotateX(${wheel.rotation + 32}deg) translateZ(220px) ` }}>1</div>
-				<div className="border-2 grid place-items-center h-16 w-[24rem] stack" style={{ transform: `rotatex(${wheel.rotation + 16}deg) translatez(220px) ` }}>2</div>
-				<div className="border-2 grid place-items-center h-16 w-[24rem] stack" style={{ transform: `rotateX(${wheel.rotation}deg) translateZ(220px) ` }}>3</div>
-				<div className="border-2 grid place-items-center h-16 w-[24rem] stack" style={{ transform: `rotateX(${wheel.rotation - 16}deg) translateZ(220px) ` }}>4</div>
-				<div className="border-2 grid place-items-center h-16 w-[24rem] stack" style={{ transform: `rotateX(${wheel.rotation - 32}deg) translateZ(220px) ` }}>5</div>
+				<div className="border-2 grid place-items-center h-16 w-[24rem] stack" style={{ transform: `rotateX(${rotation + 32}deg) translateZ(220px) ` }}>1</div>
+				<div className="border-2 grid place-items-center h-16 w-[24rem] stack" style={{ transform: `rotatex(${rotation + 16}deg) translatez(220px) ` }}>2</div>
+				<div className="border-2 grid place-items-center h-16 w-[24rem] stack" style={{ transform: `rotateX(${rotation}deg) translateZ(220px) ` }}>3</div>
+				<div className="border-2 grid place-items-center h-16 w-[24rem] stack" style={{ transform: `rotateX(${rotation - 16}deg) translateZ(220px) ` }}>4</div>
+				<div className="border-2 grid place-items-center h-16 w-[24rem] stack" style={{ transform: `rotateX(${rotation - 32}deg) translateZ(220px) ` }}>5</div>
 			</div>
 			<button className="mt-4 p-2 bg-blue-500 text-white rounded" onClick={start}> Spin</button>
 		</>
