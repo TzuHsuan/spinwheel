@@ -5,7 +5,7 @@ const GRID_SPACING = 4
 const GRID_COLOR = "rgba(0,0,0,.4)"
 const FILL_COLOR = '#f50'
 
-export const Visualizer = () => {
+export const Visualizer = ({ setDuration, isSpinning }: { setDuration: React.Dispatch<React.SetStateAction<number>>, isSpinning: boolean }) => {
 
 	const canvasRef = useRef<HTMLCanvasElement>(null)
 	let canvasCtx: CanvasRenderingContext2D | null
@@ -33,8 +33,15 @@ export const Visualizer = () => {
 	let audioEle: HTMLAudioElement
 	useEffect(() => {
 		audioEle = new Audio("/yugioh.mp3")
+		audioRef.current = audioEle
 		audioEle.preload = "metadata"
+		audioEle.onloadedmetadata = () => {
+			console.log(audioEle.duration)
+			setDuration(audioEle.duration * 1000) // Set duration in milliseconds
+		}
 	}, [])
+
+
 
 	// useEffect(() => {
 	// 	if (!audioEle) audioEle = new Audio("/yugioh.mp3")
@@ -45,18 +52,28 @@ export const Visualizer = () => {
 	let analyser: AnalyserNode
 	let audioCtx: AudioContext
 
+	useEffect(() => {
+		if (isSpinning) {
+			console.log('Starting audio visualizer')
+			console.log(audioEle)
+			console.log(audioRef.current)
+			playAudio()
+		}
+	}, [isSpinning])
+
 	const playAudio = async () => {
 		if (!canvasRef.current || !canvasCtx) return
+		console.log('Playing audio')
 
 		// audioEle = new Audio("/yugioh.mp3")
 		// await audioEle.oncanplay
 
 		if (!audioCtx) {
 			audioCtx = new AudioContext()
-			audioSource = audioCtx.createMediaElementSource(audioEle)
+			audioSource = audioCtx.createMediaElementSource(audioRef.current as HTMLMediaElement)
 			analyser = audioCtx.createAnalyser()
 		}
-		audioEle.play()
+		audioRef.current?.play()
 		audioSource.connect(analyser)
 		analyser.connect(audioCtx.destination)
 		analyser.fftSize = 128
@@ -73,7 +90,6 @@ export const Visualizer = () => {
 			if (!canvasRef.current || !canvasCtx) return
 			canvasCtx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height)
 			analyser.getByteFrequencyData(dataArray)
-			console.log(dataArray)
 			for (let i = 0; i < bufferLength; i++) {
 				barHeight = dataArray[i]
 				let barLength = Math.floor(heightPixels * barHeight / 255) * GRID_SPACING
@@ -92,7 +108,6 @@ export const Visualizer = () => {
 
 	return (<>
 		<canvas ref={canvasRef} height={101} width={513}></canvas>
-		<button onClick={playAudio}>Play</button>
 	</>
 	)
 }
