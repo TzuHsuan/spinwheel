@@ -32,7 +32,8 @@ export const Visualizer = ({ setDuration, isSpinning }: { setDuration: React.Dis
 	const audioRef = useRef<HTMLAudioElement>(null)
 	let audioEle: HTMLAudioElement
 	useEffect(() => {
-		audioEle = new Audio("/yugioh.mp3")
+		audioEle = new Audio()
+		audioEle.src = "/yugioh.mp3"
 		audioRef.current = audioEle
 		audioEle.preload = "metadata"
 		audioEle.onloadedmetadata = () => {
@@ -48,15 +49,12 @@ export const Visualizer = ({ setDuration, isSpinning }: { setDuration: React.Dis
 	// 	audioEle.src = "/yugioh.mp3"
 	// }, [audioRef.current])
 
-	let audioSource: MediaElementAudioSourceNode
+	let audioSource = useRef<MediaElementAudioSourceNode | null>(null)
 	let analyser: AnalyserNode
-	let audioCtx: AudioContext
+	let aCtx = useRef<AudioContext | null>(null)
 
 	useEffect(() => {
 		if (isSpinning) {
-			console.log('Starting audio visualizer')
-			console.log(audioEle)
-			console.log(audioRef.current)
 			playAudio()
 		}
 	}, [isSpinning])
@@ -68,15 +66,17 @@ export const Visualizer = ({ setDuration, isSpinning }: { setDuration: React.Dis
 		// audioEle = new Audio("/yugioh.mp3")
 		// await audioEle.oncanplay
 
-		if (!audioCtx) {
-			audioCtx = new AudioContext()
-			audioSource = audioCtx.createMediaElementSource(audioRef.current as HTMLMediaElement)
-			analyser = audioCtx.createAnalyser()
+		if (!aCtx.current) {
+			aCtx.current = new AudioContext()
+			audioSource.current = aCtx.current.createMediaElementSource(audioRef.current as HTMLMediaElement)
 		}
 		audioRef.current?.play()
-		audioSource.connect(analyser)
-		analyser.connect(audioCtx.destination)
-		analyser.fftSize = 128
+		if (!analyser) {
+			analyser = aCtx.current.createAnalyser()
+			audioSource.current?.connect(analyser)
+			analyser.connect(aCtx.current.destination)
+			analyser.fftSize = 128
+		}
 
 		const bufferLength = analyser.frequencyBinCount
 		const dataArray = new Uint8Array(bufferLength)
