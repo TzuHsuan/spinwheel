@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 import { Tracks } from "@/app/components/tracks"
 import { Visualizer } from "./components/eq"
 import { Roulette } from "./components/roulette"
+import { Entries } from "./components/entries"
 
 export default function Home() {
   const [trackIndex, setTrackIndex] = useState(0)
@@ -16,15 +17,17 @@ export default function Home() {
   const [isSpinning, setIsSpinning] = useState(false)
   const [winner, setWinner] = useState<string | null>(null)
   const [duration, setDuration] = useState(0) // Duration in milliseconds
-  const [entries, setEntries] = useState([] as { id: string, name?: string }[])
+  const [entries, setEntries] = useState([] as { id: string, entries: number, name?: string }[])
 
+  /*
   useEffect(() => {
     let entriesList = [];
     for (let i = 0; i < 50; i++) {
-      entriesList.push({ id: `${i}`, name: `Entry ${i + 1}` });
+      entriesList.push({ id: `${i}`, entries: Math.random() * 5, name: `Entry ${i + 1}` });
     }
     setEntries(entriesList);
   }, [])
+  */
 
 
   const spinEnd = () => {
@@ -37,6 +40,9 @@ export default function Home() {
       <Visualizer setDuration={setDuration} isSpinning={isSpinning} />
       <Roulette isSpinning={isSpinning} duration={duration} done={spinEnd} setWinner={setWinner} entries={entries} />
       <button onClick={() => setIsSpinning(true)} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Start Spin</button>
+      <Entries setEntries={setEntries} />
+      {entries.map((entry, index) => (
+        <div key={index} className="text-white">{entry.name || entry.id}: {entry.entries}</div>))}
     </div>
   );
 }
