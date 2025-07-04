@@ -94,6 +94,7 @@ export const Roulette = ({ entries, isSpinning, done, duration, setWinner }: { e
 		<>
 			<div className="h-[16rem] w-lg bg-black perspective-origin-center perspective-distant grid place-content-center overflow-hidden inset-shadow-sm">
 				<div className='size-2 bg-black absolute top-[50%]'></div>
+				<img src="/chevron-left.svg" alt="cener line marker" className='absolute top-[50%] -translate-y-1/2 w-8 h-8' style={{ fill: 'white' }} />
 				{panels}
 			</div>
 		</>

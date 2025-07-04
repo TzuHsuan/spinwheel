@@ -43,12 +43,6 @@ export const Visualizer = ({ setDuration, isSpinning }: { setDuration: React.Dis
 	}, [])
 
 
-
-	// useEffect(() => {
-	// 	if (!audioEle) audioEle = new Audio("/yugioh.mp3")
-	// 	audioEle.src = "/yugioh.mp3"
-	// }, [audioRef.current])
-
 	let audioSource = useRef<MediaElementAudioSourceNode | null>(null)
 	let analyser: AnalyserNode
 	let aCtx = useRef<AudioContext | null>(null)
@@ -61,10 +55,6 @@ export const Visualizer = ({ setDuration, isSpinning }: { setDuration: React.Dis
 
 	const playAudio = async () => {
 		if (!canvasRef.current || !canvasCtx) return
-		console.log('Playing audio')
-
-		// audioEle = new Audio("/yugioh.mp3")
-		// await audioEle.oncanplay
 
 		if (!aCtx.current) {
 			aCtx.current = new AudioContext()
