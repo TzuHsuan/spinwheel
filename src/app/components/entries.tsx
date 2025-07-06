@@ -12,7 +12,7 @@ export const Entries = ({ setEntries }: { setEntries: React.Dispatch<React.SetSt
 	const parseEntries = (text: string) => {
 		const lines = text.split('\n').map(line => line.trim()).filter(line => line.length > 0);
 		let seperator = ' ';
-		let order: (keyof entry)[] = [];
+		let order: (keyof entry & string)[] = [];
 		let testChunk = lines[0].split(' ')
 		if (testChunk.length < 2) {
 			testChunk = lines[0].split(',')
@@ -56,7 +56,7 @@ export const Entries = ({ setEntries }: { setEntries: React.Dispatch<React.SetSt
 
 		const newEntries: entry[] = lines.map(line => {
 			const parts = line.split(seperator).map(part => part.trim());
-			const entryObj = {}
+			let entryObj: any = {};
 			entryObj[order[0]] = parts[0];
 			entryObj[order[1]] = parts[1];
 			if (order.length === 3) {

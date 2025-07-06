@@ -4,6 +4,7 @@ import { Tracks } from "@/app/components/tracks"
 import { Visualizer } from "./components/eq"
 import { Roulette } from "./components/roulette"
 import { Entries } from "./components/entries"
+import { Side } from "./components/side"
 
 export default function Home() {
   const [trackIndex, setTrackIndex] = useState(0)
@@ -35,14 +36,15 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-500">
+    <div className="relative flex flex-col items-center bg-gray-500">
       <Tracks trackList={trackList} index={trackIndex} setIndex={setTrackIndex} />
       <Visualizer setDuration={setDuration} isSpinning={isSpinning} />
       <Roulette isSpinning={isSpinning} duration={duration} done={spinEnd} setWinner={setWinner} entries={entries} />
       <button onClick={() => setIsSpinning(true)} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Start Spin</button>
-      <Entries setEntries={setEntries} />
-      {entries.map((entry, index) => (
-        <div key={index} className="text-white">{entry.name || entry.id}: {entry.entries}</div>))}
+      <Side>
+        <Entries setEntries={setEntries} />
+        <Entries setEntries={setEntries} />
+      </Side>
     </div>
   );
 }
