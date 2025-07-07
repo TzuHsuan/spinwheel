@@ -1,4 +1,5 @@
 import React from 'react';
+import { splitText } from '../utils/parse';
 
 type entry = {
 	id: string;
@@ -10,62 +11,28 @@ export const Entries = ({ setEntries }: { setEntries: React.Dispatch<React.SetSt
 	const [raw, setRaw] = React.useState<string>('');
 
 	const parseEntries = (text: string) => {
-		const lines = text.split('\n').map(line => line.trim()).filter(line => line.length > 0);
-		let seperator = ' ';
-		let order: (keyof entry & string)[] = [];
-		let testChunk = lines[0].split(' ')
-		if (testChunk.length < 2) {
-			testChunk = lines[0].split(',')
-			if (testChunk.length > 1) {
-				seperator = ',';
-			} else {
-				return console.error(`Invalid entry format: ${lines[0]}. Expected format: "name entries" or "name, entries".`);
-			}
+		const parsedEntries = splitText(text);
+
+		if (!isNaN(parseInt(parsedEntries[0][1]))) {
+			const newEntries: entry[] = parsedEntries.map((line) => {
+				return { id: line[0], entries: Number(line[1]), name: line[2] || '' };
+			});
+			return setEntries(newEntries);
 		}
 
-		if (testChunk.length === 2) {
-			const firstIsNumber = !isNaN(Number(testChunk[0]));
-			const secondIsNumber = !isNaN(Number(testChunk[1]));
-			if (firstIsNumber && !secondIsNumber) {
-				order = ['entries', 'id'];
-			} else if (!firstIsNumber && secondIsNumber) {
-				order = ['id', 'entries'];
-			} else {
-				order = []
-			}
+		if (!isNaN(parseInt(parsedEntries[0][0]))) {
+			const newEntries: entry[] = parsedEntries.map((line) => {
+				return { id: line[1], entries: Number(line[0]), name: line[2] || '' };
+			});
+			return setEntries(newEntries);
 		}
 
-		if (testChunk.length === 3) {
-			const firstIsNumber = !isNaN(Number(testChunk[0]));
-			const secondIsNumber = !isNaN(Number(testChunk[1]));
-			const thridIsNumber = !isNaN(Number(testChunk[2]));
-			if (firstIsNumber && !secondIsNumber && !thridIsNumber) {
-				order = ['entries', 'id', 'name'];
-			} else if (!firstIsNumber && secondIsNumber && !thridIsNumber) {
-				order = ['id', 'entries', 'name'];
-			} else if (!firstIsNumber && !secondIsNumber && thridIsNumber) {
-				order = ['id', 'name', 'entries'];
-			} else {
-				order = [];
-			}
+		if (!isNaN(parseInt(parsedEntries[0][2]))) {
+			const newEntries: entry[] = parsedEntries.map((line) => {
+				return { id: line[0], entries: Number(line[2]), name: line[1] || '' };
+			});
+			return setEntries(newEntries);
 		}
-
-		if (order.length === 0) {
-			return console.error(`Invalid entry format: ${lines[0]}. Expected format: "name entries" or "name, entries".`);
-		}
-
-		const newEntries: entry[] = lines.map(line => {
-			const parts = line.split(seperator).map(part => part.trim());
-			let entryObj: any = {};
-			entryObj[order[0]] = parts[0];
-			entryObj[order[1]] = parts[1];
-			if (order.length === 3) {
-				entryObj[order[2]] = parts[2];
-			}
-			return entryObj as entry;
-		})
-
-		setEntries(newEntries);
 	}
 
 
