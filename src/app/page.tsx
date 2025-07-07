@@ -1,10 +1,14 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState, useEffect, ReactElement } from "react"
 import { Tracks } from "@/app/components/tracks"
 import { Visualizer } from "./components/eq"
 import { Roulette } from "./components/roulette"
 import { Entries } from "./components/entries"
 import { Side } from "./components/side"
+
+export type entry = {
+  id: string, entries: number, name?: string
+}
 
 export default function Home() {
   const [trackIndex, setTrackIndex] = useState(0)
@@ -18,7 +22,7 @@ export default function Home() {
   const [isSpinning, setIsSpinning] = useState(false)
   const [winner, setWinner] = useState<string | null>(null)
   const [duration, setDuration] = useState(0) // Duration in milliseconds
-  const [entries, setEntries] = useState([] as { id: string, entries: number, name?: string }[])
+  const [entries, setEntries] = useState<entry[]>([])
 
   /*
   useEffect(() => {
@@ -35,16 +39,22 @@ export default function Home() {
     setIsSpinning(false)
   }
 
+  const EntryInput = ({ setEntries }: { setEntries: React.Dispatch<React.SetStateAction<entry[]>> }) => {
+    return (
+      <Entries setEntries={setEntries} />
+    )
+  }
+
+  const blocks = [{ icon: '/icon/user.svg', title: 'Entries', content: EntryInput, props: { setEntries } }]
+
   return (
     <div className="relative flex flex-col items-center bg-gray-500">
       <Tracks trackList={trackList} index={trackIndex} setIndex={setTrackIndex} />
       <Visualizer setDuration={setDuration} isSpinning={isSpinning} />
       <Roulette isSpinning={isSpinning} duration={duration} done={spinEnd} setWinner={setWinner} entries={entries} />
       <button onClick={() => setIsSpinning(true)} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Start Spin</button>
-      <Side>
-        <Entries setEntries={setEntries} />
-        <Entries setEntries={setEntries} />
-      </Side>
+      <Side blocks={blocks} />
+      {entries.map((entry, index) => (entry.id))}
     </div>
   );
 }

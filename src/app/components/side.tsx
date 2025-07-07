@@ -1,22 +1,28 @@
-import React from 'react'
+import React, { JSXElementConstructor, ReactElement } from 'react'
 
-export const Side = ({ children }: { children: React.ReactNode | React.ReactNode[] }) => {
+type panelBlock = {
+	icon: string, title: string, content: React.FC<any>, props: any
+}
 
-	if (!children) return null;
-	if (!Array.isArray(children)) children = [children]
+export const Side = ({ blocks }: { blocks: panelBlock[] }) => {
 
-	const [activeChild, setActiveChild] = React.useState<keyof typeof children[] | null>(null);
+	if (blocks.length === 0) return null;
+
+	const [activeChild, setActiveChild] = React.useState<keyof typeof blocks[] | null>(null);
 	return (
-		<div className="absolute top-[50%] -translate-y-1/2 left-0 bg-gray-800 p-2">
-			<div className="flex flex-row items-center gap-2">
-				<ul>
-					{(children as React.ReactNode[]).map((child, index: number) => (
-						<li
-							key={index}
-							className={`size-5 ${activeChild == index ? 'text-blue-500' : 'text-white'} text-center cursor-pointer`}
-							onClick={() => activeChild === index ? setActiveChild(null) : setActiveChild(index)}>{index}</li>))}
-				</ul>
-				{(activeChild != null) && (children as React.ReactNode[])[activeChild] as React.ReactElement}
+		<div className="absolute top-[50%] -translate-y-1/2 left-0 ">
+			<div className="flex flex-col items-center w-fit items-start ">
+				{blocks.map((child, index: number) => (
+					<div key={index} className={`flex flex-col items-center w-fit relative ${activeChild === index ? 'z-2' : 'z-1'} bg-gray-800 hover:bg-gray-600 transition-colors duration-200`}>
+						<div onClick={() => activeChild === index ? setActiveChild(null) : setActiveChild(index)} className={`${activeChild === index ? 'w-md' : 'w-fit'} p-4 flex flex-row align-center`}>
+							<p className={`text-center ${activeChild === index ? 'w-full' : 'w-0'} h-8 overflow-hidden`} >{child.title}</p>
+							<img src={child.icon} alt={`Icon ${child.title}`} className={`w-8 h-8 cursor-pointer `} />
+						</div>
+						<div className={`${(activeChild !== index) && 'scale-x-0'} absolute left-0 top-16 w-md overflow-hidden p-2 bg-gray-700 rounded-md text-white origin-left`}>
+							<child.content {...child.props} />
+						</div>
+
+					</div>))}
 			</div>
 		</div>
 	)
