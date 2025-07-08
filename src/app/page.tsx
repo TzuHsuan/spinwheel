@@ -14,10 +14,10 @@ export default function Home() {
   const [trackIndex, setTrackIndex] = useState(0)
   const [trackList, setTrackList] = useState([
     { title: "Yugioh", path: "/yugioh.mp3" },
-    { title: "Track 2" },
-    { title: "Track 3" },
-    { title: "Track 4" },
-    { title: "Track 5" }
+    { title: "Track 2", path: "/yugioh.mp3" },
+    { title: "Track 3", path: "/yugioh.mp3" },
+    { title: "Track 4", path: "/yugioh.mp3" },
+    { title: "Track 5", path: "/yugioh.mp3" }
   ])
   const [isSpinning, setIsSpinning] = useState(false)
   const [winner, setWinner] = useState<string | null>(null)
@@ -50,7 +50,7 @@ export default function Home() {
   return (
     <div className="relative flex flex-col items-center bg-gray-500">
       <Tracks trackList={trackList} index={trackIndex} setIndex={setTrackIndex} />
-      <Visualizer setDuration={setDuration} isSpinning={isSpinning} />
+      <Visualizer trackPath={trackList[trackIndex].path} setDuration={setDuration} isSpinning={isSpinning} />
       <Roulette isSpinning={isSpinning} duration={duration} done={spinEnd} setWinner={setWinner} entries={entries} />
       <button onClick={() => setIsSpinning(true)} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Start Spin</button>
       <Side blocks={blocks} />

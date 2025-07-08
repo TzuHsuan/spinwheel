@@ -1,11 +1,10 @@
-'use client'
 import { useRef, useEffect, useState } from "react"
 
 const GRID_SPACING = 4
 const GRID_COLOR = "rgba(0,0,0,.4)"
 const FILL_COLOR = '#f50'
 
-export const Visualizer = ({ setDuration, isSpinning }: { setDuration: React.Dispatch<React.SetStateAction<number>>, isSpinning: boolean }) => {
+export const Visualizer = ({ trackPath, setDuration, isSpinning }: { trackPath: string, setDuration: React.Dispatch<React.SetStateAction<number>>, isSpinning: boolean }) => {
 
 	const canvasRef = useRef<HTMLCanvasElement>(null)
 	let canvasCtx: CanvasRenderingContext2D | null
@@ -30,17 +29,25 @@ export const Visualizer = ({ setDuration, isSpinning }: { setDuration: React.Dis
 	}
 
 	const audioRef = useRef<HTMLAudioElement>(null)
-	let audioEle: HTMLAudioElement
+	//let audioEle: HTMLAudioElement
+
 	useEffect(() => {
-		audioEle = new Audio()
-		audioEle.src = "/yugioh.mp3"
+		let audioEle = new Audio()
 		audioRef.current = audioEle
-		audioEle.preload = "metadata"
-		audioEle.onloadedmetadata = () => {
-			console.log(audioEle.duration)
-			setDuration(audioEle.duration * 1000) // Set duration in milliseconds
+		audioRef.current.preload = "metadata"
+		audioRef.current.onloadedmetadata = () => {
+			if (!audioRef.current) return
+			console.log(audioRef.current.duration)
+			setDuration(audioRef.current.duration * 1000) // Set duration in milliseconds
 		}
 	}, [])
+
+	useEffect(() => {
+		if (trackPath && audioRef.current) {
+			audioRef.current.src = trackPath
+			audioRef.current.load()
+		}
+	}, [trackPath, setDuration, audioRef.current]);
 
 
 	let audioSource = useRef<MediaElementAudioSourceNode | null>(null)
