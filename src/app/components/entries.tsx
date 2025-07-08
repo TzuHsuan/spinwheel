@@ -7,7 +7,6 @@ type entry = {
 	name?: string;
 };
 export const Entries = ({ setEntries }: { setEntries: React.Dispatch<React.SetStateAction<{ id: string, entries: number, name?: string }[]>> }) => {
-	const [entriesList, setEntriesList] = React.useState<string[]>([]);
 	const [raw, setRaw] = React.useState<string>('');
 
 	const parseEntries = (text: string) => {
