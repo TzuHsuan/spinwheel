@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { splitText } from '../utils/parse';
 
 export type prize = {
 	id: string, entries: number
 }
 
-export const Prizes = ({ setPrizes, done }: { setPrizes: React.Dispatch<React.SetStateAction<prize[]>>, done?: Function }) => {
+export const Prizes = ({ prizes, setPrizes, done }: { prizes: prize[], setPrizes: React.Dispatch<React.SetStateAction<prize[]>>, done?: Function }) => {
 	const [raw, setRaw] = React.useState<string>('');
 
 	const parsePrizes = (text: string) => {
@@ -34,6 +34,13 @@ export const Prizes = ({ setPrizes, done }: { setPrizes: React.Dispatch<React.Se
 			return setPrizes(newPrizes);
 		}
 	}
+
+	useEffect(() => {
+		if (!prizes || prizes.length === 0) return setRaw('');
+		const text = prizes.map((prize) => { return `${prize.id} ${prize.entries}`.trim() }).join('\n');
+		console.log(text)
+		setRaw(text);
+	}, [prizes])
 
 
 	return (

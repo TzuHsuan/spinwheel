@@ -84,8 +84,8 @@ export default function Home() {
     }
   })
 
-  const blocks = [{ icon: '/icon/ticket.svg', title: 'Entries', content: EntryInput, props: { setEntries } },
-  { icon: '/icon/gift.svg', title: 'Prizes', content: PrizeInput, props: { setPrizes } },
+  const blocks = [{ icon: '/icon/ticket.svg', title: 'Entries', content: EntryInput, props: { entries, setEntries } },
+  { icon: '/icon/gift.svg', title: 'Prizes', content: PrizeInput, props: { prizes, setPrizes } },
   { icon: '/icon/user.svg', title: 'Participants', content: Entriants, props: { entries } },
   { icon: '/icon/trophy.svg', title: 'Winners', content: WinnersTable, props: { winners } },
   { icon: '/icon/settings.svg', title: 'Settings', content: SettingsPanel, props: { settings, setSettings } },
@@ -103,15 +103,15 @@ export default function Home() {
   );
 }
 
-const EntryInput = ({ setEntries, done }: { setEntries: React.Dispatch<React.SetStateAction<entry[]>>, done?: Function }) => {
+const EntryInput = ({ entries, setEntries, done }: { entries: entry[], setEntries: React.Dispatch<React.SetStateAction<entry[]>>, done?: Function }) => {
   return (
-    <Entries setEntries={setEntries} done={done} />
+    <Entries entries={entries} setEntries={setEntries} done={done} />
   )
 }
 
-const PrizeInput = ({ setPrizes, done }: { setPrizes: React.Dispatch<React.SetStateAction<prize[]>>, done?: Function }) => {
+const PrizeInput = ({ prizes, setPrizes, done }: { prizes: prize[], setPrizes: React.Dispatch<React.SetStateAction<prize[]>>, done?: Function }) => {
   return (
-    <Prizes setPrizes={setPrizes} done={done} />
+    <Prizes prizes={prizes} setPrizes={setPrizes} done={done} />
   )
 }
 

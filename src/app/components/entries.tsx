@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { splitText } from '../utils/parse';
 
 type entry = {
@@ -6,7 +6,7 @@ type entry = {
 	entries: number;
 	name?: string;
 };
-export const Entries = ({ setEntries, done }: { setEntries: React.Dispatch<React.SetStateAction<entry[]>>, done?: Function }) => {
+export const Entries = ({ entries, setEntries, done }: { entries: entry[], setEntries: React.Dispatch<React.SetStateAction<entry[]>>, done?: Function }) => {
 	const [raw, setRaw] = React.useState<string>('');
 
 	const parseEntries = (text: string) => {
@@ -36,6 +36,13 @@ export const Entries = ({ setEntries, done }: { setEntries: React.Dispatch<React
 			return setEntries(newEntries);
 		}
 	}
+
+	useEffect(() => {
+		if (!entries || entries.length === 0) return setRaw('');
+		const text = entries.map((entry) => { return `${entry.id} ${entry.entries} ${entry.name || ''}`.trim() }).join('\n');
+		console.log(text)
+		setRaw(text);
+	}, [entries])
 
 
 	return (
