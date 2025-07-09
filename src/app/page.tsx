@@ -35,6 +35,13 @@ export default function Home() {
   const [winners, setWinners] = useState<Winner[]>([])
   const [settings, setSettings] = useState<Object>({})
 
+  const startSpin = () => {
+    if (entries.length === 0 || prizes.length === 0) {
+      alert("Please add entries and prizes before spinning.");
+      return;
+    }
+    setIsSpinning(true);
+  }
 
   const spinEnd = () => {
     setIsSpinning(false)
@@ -89,7 +96,7 @@ export default function Home() {
       <PrizePicker prizeList={prizes} setIndex={setPrizeIndex} index={prizeIndex} />
       <Visualizer trackPath={trackList[trackIndex].path} setDuration={setDuration} isSpinning={isSpinning} />
       <Roulette isSpinning={isSpinning} duration={duration} done={spinEnd} setWinner={setWinner} entries={entries} />
-      <button onClick={() => setIsSpinning(true)} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Start Spin</button>
+      <button onClick={startSpin} disabled={isSpinning} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Start Spin</button>
       <Side blocks={blocks} />
     </div>
   );

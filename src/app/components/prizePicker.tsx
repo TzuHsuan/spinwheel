@@ -6,7 +6,7 @@ import { prize } from "./prizes";
 export const PrizePicker = ({ prizeList, index, setIndex }: { prizeList: prize[], index: number, setIndex: Dispatch<SetStateAction<number>> }) => {
 
 	const prizeNames = prizeList.map((prize, i) => {
-		return (<div className={`m-auto ${index === i ? '' : 'opacity-50'} min-w-full text-center`} key={prize.id}>{prize.id}</div>)
+		return (<div className={`m-auto ${index === i ? '' : 'opacity-50'} min-w-full text-center`} key={prize.id}>{prize.id} x {prize.entries}</div>)
 	})
 
 
