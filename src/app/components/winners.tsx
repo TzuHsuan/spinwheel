@@ -9,14 +9,22 @@ export type Winner = {
 export const Winners = ({ winners }: { winners: Winner[] }) => {
 	return (
 		<div className="w-full h-full p-4">
-			<h2 className="text-xl font-bold mb-4">Winners</h2>
-			<ul className="list-disc pl-5">
-				{winners.map((winner, index) => (
-					<li key={index} className="mb-2">
-						<span className="font-semibold">{winner.name || winner.id}</span> won <span className="italic">{winner.prize}</span>
-					</li>
-				))}
-			</ul>
+			<table className="w-full table-auto border-collapse border border-gray-300">
+				<thead>
+					<tr className="bg-gray-100">
+						<th className="border border-gray-300 px-4 py-2">ID</th>
+						<th className="border border-gray-300 px-4 py-2">Prize</th>
+					</tr>
+				</thead>
+				<tbody>
+					{winners.map((winner, index) => (
+						<tr key={index} className="hover:bg-gray-50">
+							<td className="border border-gray-300 px-4 py-2">{winner.id}</td>
+							<td className="border border-gray-300 px-4 py-2">{winner.prize}</td>
+						</tr>
+					))}
+				</tbody>
+			</table>
 		</div>
 	);
 }

@@ -7,6 +7,7 @@ import { Entries } from "./components/entries"
 import { Prizes } from "./components/prizes"
 import { PrizePicker } from "./components/prizePicker"
 import { Side } from "./components/side"
+import { Participants } from "./components/participants"
 import { Winners } from "./components/winners"
 import { Settings } from "./components/settings"
 
@@ -39,8 +40,45 @@ export default function Home() {
     setIsSpinning(false)
   }
 
-  const blocks = [{ icon: '/icon/user.svg', title: 'Entries', content: EntryInput, props: { setEntries } },
+  useEffect(() => {
+    if (winner) {
+      console.log(`${winner} won ${prizes[prizeIndex].id}`);
+      setWinners(prev => [...prev, { id: winner, prize: prizes[prizeIndex].id }])
+      setWinner(null)
+      setEntries(prev => {
+        return prev.map(entry => {
+          if (entry.id === winner) {
+            return { ...entry, entries: entry.entries - 1 }
+          }
+          return entry
+        }).filter(entry => entry.entries > 0)
+      })
+      setPrizes(prev => {
+        return prev.map((prize, index) => {
+          if (index === prizeIndex) {
+            return { ...prize, entries: prize.entries - 1 }
+          }
+          return prize
+        }).filter(prize => prize.entries > 0)
+      })
+    }
+  }, [winner, prizes, prizeIndex, entries])
+
+  useEffect(() => {
+    if (prizes.length > 0 && prizeIndex >= prizes.length) {
+      setPrizeIndex(prizes.length - 1);
+    }
+  })
+
+  useEffect(() => {
+    if (trackList.length > 0 && trackIndex >= trackList.length) {
+      setTrackIndex(trackList.length - 1);
+    }
+  })
+
+  const blocks = [{ icon: '/icon/ticket.svg', title: 'Entries', content: EntryInput, props: { setEntries } },
   { icon: '/icon/gift.svg', title: 'Prizes', content: PrizeInput, props: { setPrizes } },
+  { icon: '/icon/user.svg', title: 'Participants', content: Entriants, props: { entries } },
   { icon: '/icon/trophy.svg', title: 'Winners', content: WinnersTable, props: { winners } },
   { icon: '/icon/settings.svg', title: 'Settings', content: SettingsPanel, props: { settings, setSettings } },
   ]
@@ -66,6 +104,12 @@ const EntryInput = ({ setEntries }: { setEntries: React.Dispatch<React.SetStateA
 const PrizeInput = ({ setPrizes }: { setPrizes: React.Dispatch<React.SetStateAction<prize[]>> }) => {
   return (
     <Prizes setPrizes={setPrizes} />
+  )
+}
+
+const Entriants = ({ entries }: { entries: entry[] }) => {
+  return (
+    <Participants participants={entries} />
   )
 }
 
