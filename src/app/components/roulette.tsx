@@ -1,22 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { Chevron } from "@/app/components/chevron"
 
-type entry = {
-	id: string,
-	name?: string,
-}
+import type { entry } from "@/app/page";
+
 
 export const Roulette = ({ entries, isSpinning, done, duration, setWinner }: { entries: entry[], isSpinning: boolean, done: Function, duration: number, setWinner: React.Dispatch<React.SetStateAction<string | null>> }) => {
 	const [rotation, setRotation] = useState(0);
 	const requestRef = React.useRef(0);
 	let startTime = 0;
 	let maxSpeed = 0;
-	const [list, setList] = useState(['1', '2', '3', '4', '5'])
+	const [list, setList] = useState(['', '', '', '', ''])
 
 	const newEntry = () => {
-		const entry = entries[Math.floor(Math.random() * entries.length)];
-		return entry.name || entry.id;
+		console.log(totalEntries)
+		let target = Math.ceil(Math.random() * totalEntries);
+		console.log(target)
+		let index = 0
+		while (target > 0) {
+			target -= entries[index].entries;
+			if (target <= 0) return entries[index].id;
+			index++;
+		}
 	}
+
+	const [totalEntries, setTotalEntries] = useState(0);
+
+	useEffect(() => {
+		setTotalEntries(entries.reduce((acc, entry) => acc + entry.entries, 0));
+	}, [entries]);
 
 
 	//progress should be between 0 and 1
@@ -37,7 +48,9 @@ export const Roulette = ({ entries, isSpinning, done, duration, setWinner }: { e
 		if (rotation < -16) {
 			setRotation(prev => prev + 16);
 			setList(prev => {
-				return [newEntry(), ...prev.slice(0, -1)]
+				let newEnt = newEntry() as string;
+				console.log(newEnt)
+				return [newEnt, ...prev.slice(0, -1)]
 			});
 		}
 	}, [rotation, list])
