@@ -95,15 +95,15 @@ export default function Home() {
   );
 }
 
-const EntryInput = ({ setEntries }: { setEntries: React.Dispatch<React.SetStateAction<entry[]>> }) => {
+const EntryInput = ({ setEntries, done }: { setEntries: React.Dispatch<React.SetStateAction<entry[]>>, done?: Function }) => {
   return (
-    <Entries setEntries={setEntries} />
+    <Entries setEntries={setEntries} done={done} />
   )
 }
 
-const PrizeInput = ({ setPrizes }: { setPrizes: React.Dispatch<React.SetStateAction<prize[]>> }) => {
+const PrizeInput = ({ setPrizes, done }: { setPrizes: React.Dispatch<React.SetStateAction<prize[]>>, done?: Function }) => {
   return (
-    <Prizes setPrizes={setPrizes} />
+    <Prizes setPrizes={setPrizes} done={done} />
   )
 }
 

@@ -5,16 +5,16 @@ export type prize = {
 	id: string, entries: number
 }
 
-export const Prizes = ({ setPrizes }: { setPrizes: React.Dispatch<React.SetStateAction<prize[]>> }) => {
+export const Prizes = ({ setPrizes, done }: { setPrizes: React.Dispatch<React.SetStateAction<prize[]>>, done?: Function }) => {
 	const [raw, setRaw] = React.useState<string>('');
 
 	const parsePrizes = (text: string) => {
 		const parsedPrizes = splitText(text);
-
 		if (!isNaN(parseInt(parsedPrizes[0][1]))) {
 			const newPrizes: prize[] = parsedPrizes.map((line) => {
 				return { id: line[0], entries: Number(line[1]), name: line[2] || '' };
 			});
+			done?.();
 			return setPrizes(newPrizes);
 		}
 
@@ -22,6 +22,7 @@ export const Prizes = ({ setPrizes }: { setPrizes: React.Dispatch<React.SetState
 			const newPrizes: prize[] = parsedPrizes.map((line) => {
 				return { id: line[1], entries: Number(line[0]), name: line[2] || '' };
 			});
+			done?.();
 			return setPrizes(newPrizes);
 		}
 
@@ -29,6 +30,7 @@ export const Prizes = ({ setPrizes }: { setPrizes: React.Dispatch<React.SetState
 			const newPrizes: prize[] = parsedPrizes.map((line) => {
 				return { id: line[0], entries: Number(line[2]), name: line[1] || '' };
 			});
+			done?.();
 			return setPrizes(newPrizes);
 		}
 	}

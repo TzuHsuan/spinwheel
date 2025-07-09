@@ -9,6 +9,11 @@ export const Side = ({ blocks }: { blocks: panelBlock[] }) => {
 	if (blocks.length === 0) return null;
 
 	const [activeChild, setActiveChild] = React.useState<keyof typeof blocks[] | null>(null);
+
+	const closeSelf = () => {
+		setActiveChild(null);
+	}
+
 	return (
 		<div className="absolute top-[30%] -translate-y-1/2 left-0 ">
 			<div className="flex flex-col items-center w-fit items-start ">
@@ -19,7 +24,7 @@ export const Side = ({ blocks }: { blocks: panelBlock[] }) => {
 							<img src={child.icon} alt={`Icon ${child.title}`} className={`w-8 h-8  `} />
 						</div>
 						<div className={`${(activeChild !== index) ? 'scale-x-0' : 'scale-x-100'} absolute left-0 top-16 w-md overflow-hidden p-2 bg-gray-700 rounded-md text-white origin-left transition-transform`}>
-							<child.content {...child.props} />
+							<child.content {...child.props} done={closeSelf} />
 						</div>
 
 					</div>))}

@@ -6,7 +6,7 @@ type entry = {
 	entries: number;
 	name?: string;
 };
-export const Entries = ({ setEntries }: { setEntries: React.Dispatch<React.SetStateAction<{ id: string, entries: number, name?: string }[]>> }) => {
+export const Entries = ({ setEntries, done }: { setEntries: React.Dispatch<React.SetStateAction<entry[]>>, done?: Function }) => {
 	const [raw, setRaw] = React.useState<string>('');
 
 	const parseEntries = (text: string) => {
@@ -16,6 +16,7 @@ export const Entries = ({ setEntries }: { setEntries: React.Dispatch<React.SetSt
 			const newEntries: entry[] = parsedEntries.map((line) => {
 				return { id: line[0], entries: Number(line[1]), name: line[2] || '' };
 			});
+			done?.();
 			return setEntries(newEntries);
 		}
 
@@ -23,6 +24,7 @@ export const Entries = ({ setEntries }: { setEntries: React.Dispatch<React.SetSt
 			const newEntries: entry[] = parsedEntries.map((line) => {
 				return { id: line[1], entries: Number(line[0]), name: line[2] || '' };
 			});
+			done?.();
 			return setEntries(newEntries);
 		}
 
@@ -30,6 +32,7 @@ export const Entries = ({ setEntries }: { setEntries: React.Dispatch<React.SetSt
 			const newEntries: entry[] = parsedEntries.map((line) => {
 				return { id: line[0], entries: Number(line[2]), name: line[1] || '' };
 			});
+			done?.();
 			return setEntries(newEntries);
 		}
 	}
