@@ -22,10 +22,10 @@ export default function Home() {
   const [trackIndex, setTrackIndex] = useState(0)
   const [trackList, setTrackList] = useState([
     { title: "Yugioh", path: "/yugioh.mp3" },
-    { title: "Track 2", path: "/yugioh.mp3" },
-    { title: "Track 3", path: "/yugioh.mp3" },
-    { title: "Track 4", path: "/yugioh.mp3" },
-    { title: "Track 5", path: "/yugioh.mp3" }
+    { title: "Dog Song", path: "/Dogsong.mp3" },
+    { title: "Dummy", path: "/Dummy1.mp3" },
+    { title: "Nyeh Heh Heh!", path: "/Nyeh Heh Heh!.mp3" },
+    { title: "Spider Dance", path: "/Spider Dance.mp3" }
   ])
   const [isSpinning, setIsSpinning] = useState(false)
   const [winner, setWinner] = useState<string | null>(null)
