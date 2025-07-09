@@ -5,7 +5,7 @@ export type prize = {
 	id: string, entries: number
 }
 
-export const Prizes = ({ prizes, setPrizes, done }: { prizes: prize[], setPrizes: React.Dispatch<React.SetStateAction<prize[]>>, done?: Function }) => {
+export const Prizes = ({ prizes, setPrizes, done }: { prizes: prize[], setPrizes: React.Dispatch<React.SetStateAction<prize[]>>, done?: () => void }) => {
 	const [raw, setRaw] = React.useState<string>('');
 
 	const parsePrizes = (text: string) => {

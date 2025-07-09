@@ -4,7 +4,7 @@ import { Chevron } from "@/app/components/chevron"
 import type { entry } from "@/app/page";
 
 
-export const Roulette = ({ entries, isSpinning, done, duration, setWinner }: { entries: entry[], isSpinning: boolean, done: Function, duration: number, setWinner: React.Dispatch<React.SetStateAction<string | null>> }) => {
+export const Roulette = ({ entries, isSpinning, done, duration, setWinner }: { entries: entry[], isSpinning: boolean, done: () => void, duration: number, setWinner: React.Dispatch<React.SetStateAction<string | null>> }) => {
 	const [rotation, setRotation] = useState(0);
 	const requestRef = React.useRef(0);
 	let startTime = 0;
@@ -48,8 +48,7 @@ export const Roulette = ({ entries, isSpinning, done, duration, setWinner }: { e
 		if (rotation < -16) {
 			setRotation(prev => prev + 16);
 			setList(prev => {
-				let newEnt = newEntry() as string;
-				console.log(newEnt)
+				const newEnt = newEntry() as string;
 				return [newEnt, ...prev.slice(0, -1)]
 			});
 		}
@@ -68,13 +67,13 @@ export const Roulette = ({ entries, isSpinning, done, duration, setWinner }: { e
 			startTime = timestamp;
 			requestRef.current = requestAnimationFrame(spin);
 		} else {
-			let elapsed = timestamp - startTime;
+			const elapsed = timestamp - startTime;
 			if (elapsed > duration) {
 				done();
 				return
 			}
 			setRotation(prev => {
-				let newRotation = prev - spinSpeed(elapsed / duration);
+				const newRotation = prev - spinSpeed(elapsed / duration);
 				return newRotation
 			});
 			requestRef.current = requestAnimationFrame(spin);

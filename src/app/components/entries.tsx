@@ -6,7 +6,7 @@ type entry = {
 	entries: number;
 	name?: string;
 };
-export const Entries = ({ entries, setEntries, done }: { entries: entry[], setEntries: React.Dispatch<React.SetStateAction<entry[]>>, done?: Function }) => {
+export const Entries = ({ entries, setEntries, done }: { entries: entry[], setEntries: React.Dispatch<React.SetStateAction<entry[]>>, done?: () => void }) => {
 	const [raw, setRaw] = React.useState<string>('');
 
 	const parseEntries = (text: string) => {

@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from "react"
+import { useRef, useEffect } from "react"
 
 const GRID_SPACING = 4
 const GRID_COLOR = "rgba(0,0,0,.4)"
@@ -7,32 +7,31 @@ const FILL_COLOR = '#f50'
 export const Visualizer = ({ trackPath, setDuration, isSpinning, volume }: { trackPath: string, setDuration: React.Dispatch<React.SetStateAction<number>>, isSpinning: boolean, volume: number }) => {
 
 	const canvasRef = useRef<HTMLCanvasElement>(null)
-	let canvasCtx: CanvasRenderingContext2D | null
+	const canvasCtx = useRef<CanvasRenderingContext2D | null>(null)
 
 	useEffect(() => {
 		if (!canvasRef.current) return
-		canvasCtx = canvasRef.current.getContext('2d')
+		canvasCtx.current = canvasRef.current.getContext('2d')
 		drawGrid()
 	})
 
 	const drawGrid = () => {
-		if (!canvasRef.current || !canvasCtx) return
+		if (!canvasRef.current || !canvasCtx.current) return
 		for (let i = 0; i < canvasRef.current?.width; i += GRID_SPACING) {
-			canvasCtx.fillStyle = GRID_COLOR
-			canvasCtx.fillRect(0, i, 1, canvasRef.current.height)
+			canvasCtx.current.fillStyle = GRID_COLOR
+			canvasCtx.current.fillRect(0, i, 1, canvasRef.current.height)
 		}
 
 		for (let i = 0; i < canvasRef.current?.height; i += GRID_SPACING) {
-			canvasCtx.fillStyle = GRID_COLOR
-			canvasCtx.fillRect(0, i, canvasRef.current.width, 1)
+			canvasCtx.current.fillStyle = GRID_COLOR
+			canvasCtx.current.fillRect(0, i, canvasRef.current.width, 1)
 		}
 	}
 
 	const audioRef = useRef<HTMLAudioElement>(null)
-	//let audioEle: HTMLAudioElement
 
 	useEffect(() => {
-		let audioEle = new Audio()
+		const audioEle = new Audio()
 		audioRef.current = audioEle
 		audioRef.current.preload = "metadata"
 		audioRef.current.onloadedmetadata = () => {
@@ -40,14 +39,14 @@ export const Visualizer = ({ trackPath, setDuration, isSpinning, volume }: { tra
 			console.log(audioRef.current.duration)
 			setDuration(audioRef.current.duration * 1000) // Set duration in milliseconds
 		}
-	}, [])
+	}, [setDuration])
 
 	useEffect(() => {
 		if (trackPath && audioRef.current) {
 			audioRef.current.src = trackPath
 			audioRef.current.load()
 		}
-	}, [trackPath, setDuration, audioRef.current]);
+	}, [trackPath, setDuration, audioRef]);
 
 	useEffect(() => {
 		if (audioRef.current) {
@@ -57,15 +56,10 @@ export const Visualizer = ({ trackPath, setDuration, isSpinning, volume }: { tra
 
 
 
-	let audioSource = useRef<MediaElementAudioSourceNode | null>(null)
+	const audioSource = useRef<MediaElementAudioSourceNode | null>(null)
+	const aCtx = useRef<AudioContext | null>(null)
 	let analyser: AnalyserNode
-	let aCtx = useRef<AudioContext | null>(null)
 
-	useEffect(() => {
-		if (isSpinning) {
-			playAudio()
-		}
-	}, [isSpinning])
 
 	const playAudio = async () => {
 		if (!canvasRef.current || !canvasCtx) return
@@ -88,17 +82,17 @@ export const Visualizer = ({ trackPath, setDuration, isSpinning, volume }: { tra
 		const barWidth = (canvasRef.current.width - 1) / bufferLength
 		let barHeight
 
-		let heightPixels = canvasRef.current.height / GRID_SPACING
+		const heightPixels = canvasRef.current.height / GRID_SPACING
 
 		const drawVisualizer = () => {
-			if (!canvasRef.current || !canvasCtx) return
-			canvasCtx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height)
+			if (!canvasRef.current || !canvasCtx.current) return
+			canvasCtx.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height)
 			analyser.getByteFrequencyData(dataArray)
 			for (let i = 0; i < bufferLength; i++) {
 				barHeight = dataArray[i]
-				let barLength = Math.floor(heightPixels * barHeight / 255) * GRID_SPACING
-				canvasCtx.fillStyle = FILL_COLOR
-				canvasCtx.fillRect(i * barWidth, canvasRef.current.height - barLength, barWidth, barLength)
+				const barLength = Math.floor(heightPixels * barHeight / 255) * GRID_SPACING
+				canvasCtx.current.fillStyle = FILL_COLOR
+				canvasCtx.current.fillRect(i * barWidth, canvasRef.current.height - barLength, barWidth, barLength)
 			}
 
 			drawGrid()
@@ -109,6 +103,11 @@ export const Visualizer = ({ trackPath, setDuration, isSpinning, volume }: { tra
 	}
 
 
+	useEffect(() => {
+		if (isSpinning) {
+			playAudio()
+		}
+	}, [isSpinning])
 
 	return (<>
 		<canvas ref={canvasRef} height={101} width={513}></canvas>
