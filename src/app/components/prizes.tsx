@@ -1,33 +1,32 @@
 import React from 'react';
 import { splitText } from '../utils/parse';
 
-type entry = {
-	id: string;
-	entries: number;
-	name?: string;
-};
-export const Prizes = ({ setPrizes }: { setPrizes: React.Dispatch<React.SetStateAction<{ id: string, entries: number, }[]>> }) => {
+export type prize = {
+	id: string, entries: number
+}
+
+export const Prizes = ({ setPrizes }: { setPrizes: React.Dispatch<React.SetStateAction<prize[]>> }) => {
 	const [raw, setRaw] = React.useState<string>('');
 
 	const parsePrizes = (text: string) => {
 		const parsedPrizes = splitText(text);
 
 		if (!isNaN(parseInt(parsedPrizes[0][1]))) {
-			const newPrizes: entry[] = parsedPrizes.map((line) => {
+			const newPrizes: prize[] = parsedPrizes.map((line) => {
 				return { id: line[0], entries: Number(line[1]), name: line[2] || '' };
 			});
 			return setPrizes(newPrizes);
 		}
 
 		if (!isNaN(parseInt(parsedPrizes[0][0]))) {
-			const newPrizes: entry[] = parsedPrizes.map((line) => {
+			const newPrizes: prize[] = parsedPrizes.map((line) => {
 				return { id: line[1], entries: Number(line[0]), name: line[2] || '' };
 			});
 			return setPrizes(newPrizes);
 		}
 
 		if (!isNaN(parseInt(parsedPrizes[0][2]))) {
-			const newPrizes: entry[] = parsedPrizes.map((line) => {
+			const newPrizes: prize[] = parsedPrizes.map((line) => {
 				return { id: line[0], entries: Number(line[2]), name: line[1] || '' };
 			});
 			return setPrizes(newPrizes);
