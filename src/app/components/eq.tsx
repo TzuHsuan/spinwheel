@@ -4,7 +4,7 @@ const GRID_SPACING = 4
 const GRID_COLOR = "rgba(0,0,0,.4)"
 const FILL_COLOR = '#f50'
 
-export const Visualizer = ({ trackPath, setDuration, isSpinning }: { trackPath: string, setDuration: React.Dispatch<React.SetStateAction<number>>, isSpinning: boolean }) => {
+export const Visualizer = ({ trackPath, setDuration, isSpinning, volume }: { trackPath: string, setDuration: React.Dispatch<React.SetStateAction<number>>, isSpinning: boolean, volume: number }) => {
 
 	const canvasRef = useRef<HTMLCanvasElement>(null)
 	let canvasCtx: CanvasRenderingContext2D | null
@@ -48,6 +48,13 @@ export const Visualizer = ({ trackPath, setDuration, isSpinning }: { trackPath: 
 			audioRef.current.load()
 		}
 	}, [trackPath, setDuration, audioRef.current]);
+
+	useEffect(() => {
+		if (audioRef.current) {
+			audioRef.current.volume = volume / 100 // Assuming volume is between 0 and 100
+		}
+	}, [volume])
+
 
 
 	let audioSource = useRef<MediaElementAudioSourceNode | null>(null)

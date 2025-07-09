@@ -16,6 +16,7 @@ export type entry = {
 }
 import type { prize } from "./components/prizes"
 import type { Winner } from "./components/winners"
+import type { SettingsType } from "./components/settings"
 
 export default function Home() {
   const [trackIndex, setTrackIndex] = useState(0)
@@ -33,7 +34,7 @@ export default function Home() {
   const [prizes, setPrizes] = useState<prize[]>([])
   const [prizeIndex, setPrizeIndex] = useState(0)
   const [winners, setWinners] = useState<Winner[]>([])
-  const [settings, setSettings] = useState<Object>({})
+  const [settings, setSettings] = useState<SettingsType>({ volume: 50 })
 
   const startSpin = () => {
     if (entries.length === 0 || prizes.length === 0) {
@@ -94,7 +95,7 @@ export default function Home() {
     <div className="relative flex flex-col h-dvh items-center bg-background-300">
       <Tracks trackList={trackList} index={trackIndex} setIndex={setTrackIndex} />
       <PrizePicker prizeList={prizes} setIndex={setPrizeIndex} index={prizeIndex} />
-      <Visualizer trackPath={trackList[trackIndex].path} setDuration={setDuration} isSpinning={isSpinning} />
+      <Visualizer trackPath={trackList[trackIndex].path} setDuration={setDuration} isSpinning={isSpinning} volume={settings.volume} />
       <Roulette isSpinning={isSpinning} duration={duration} done={spinEnd} setWinner={setWinner} entries={entries} />
       <button onClick={startSpin} disabled={isSpinning} className="mt-4 px-4 py-2 bg-background-200 hover:bg-background-300 cursor-pointer shadow text-black rounded">Start Spin</button>
       <Side blocks={blocks} />
@@ -126,7 +127,7 @@ const WinnersTable = ({ winners }: { winners: Winner[] }) => {
   )
 }
 
-const SettingsPanel = ({ settings, setSettings }: { settings: Object, setSettings: React.Dispatch<React.SetStateAction<Object>> }) => {
+const SettingsPanel = ({ settings, setSettings }: { settings: SettingsType, setSettings: React.Dispatch<React.SetStateAction<SettingsType>> }) => {
   return (
     <Settings settings={settings} setSettings={setSettings} />
   )
