@@ -86,7 +86,7 @@ export const Roulette = ({ entries, isSpinning, done, duration, setWinner }: { e
 	}, [isSpinning])
 
 	const panels = list.map((item, index) => (
-		<div key={item + index} className="border-2 bg-gray-700 grid place-items-center h-16 w-[24rem] stack" style={{ transform: `rotateX(${rotation + 32 - (index) * 16}deg) translateZ(220px)` }}>
+		<div key={item + index} className="border-2 border-black bg-background-300 text-black grid place-items-center h-16 w-[24rem] stack" style={{ transform: `rotateX(${rotation + 32 - (index) * 16}deg) translateZ(220px)` }}>
 			{item}
 		</div>
 	))

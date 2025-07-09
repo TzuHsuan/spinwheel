@@ -12,9 +12,9 @@ export const Participants = ({ participants }: { participants: entry[] }) => {
 	}, [participants]);
 
 	return (
-		<table className="w-full table-auto border-collapse border border-gray-300">
+		<table className="w-full table-auto text-black border-collapse border border-gray-300">
 			<thead>
-				<tr className="bg-gray-100">
+				<tr className="bg-background-300">
 					<th className="border border-gray-300 px-4 py-2">ID</th>
 					<th className="border border-gray-300 px-4 py-2">Entries</th>
 					<th className="border border-gray-300 px-4 py-2">Chance</th>
@@ -22,7 +22,7 @@ export const Participants = ({ participants }: { participants: entry[] }) => {
 			</thead>
 			<tbody>
 				{participants.map((participant, index) => (
-					<tr key={index} className="hover:bg-gray-50">
+					<tr key={index} className="bg-background-200 hover:bg-background-300">
 						<td className="border border-gray-300 px-4 py-2">{participant.id}</td>
 						<td className="border border-gray-300 px-4 py-2">{participant.entries}</td>
 						<td className="border border-gray-300 px-4 py-2">{((participant.entries / totalEntries * 100) || 0).toFixed(2) + '%'}</td>

@@ -91,12 +91,12 @@ export default function Home() {
   ]
 
   return (
-    <div className="relative flex flex-col h-dvh items-center bg-gray-500">
+    <div className="relative flex flex-col h-dvh items-center bg-background-300">
       <Tracks trackList={trackList} index={trackIndex} setIndex={setTrackIndex} />
       <PrizePicker prizeList={prizes} setIndex={setPrizeIndex} index={prizeIndex} />
       <Visualizer trackPath={trackList[trackIndex].path} setDuration={setDuration} isSpinning={isSpinning} />
       <Roulette isSpinning={isSpinning} duration={duration} done={spinEnd} setWinner={setWinner} entries={entries} />
-      <button onClick={startSpin} disabled={isSpinning} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Start Spin</button>
+      <button onClick={startSpin} disabled={isSpinning} className="mt-4 px-4 py-2 bg-background-200 hover:bg-background-300 cursor-pointer shadow text-black rounded">Start Spin</button>
       <Side blocks={blocks} />
     </div>
   );

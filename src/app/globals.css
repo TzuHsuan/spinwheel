@@ -35,10 +35,19 @@
   }
 }
 
+@theme {
+  --color-background-100: oklch(98.34% 0.0199 200.65);
+  --color-background-200: oklch(93.34% 0.0199 200.65);
+  --color-background-300: oklch(87.14% 0.0199 200.65);
+
+  --color-brand: oklch(32.48% 0.0542 202.36)
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+  color: black;
 }
 
 .carousel-items {

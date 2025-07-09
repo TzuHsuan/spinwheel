@@ -40,8 +40,8 @@ export const Entries = ({ setEntries, done }: { setEntries: React.Dispatch<React
 
 	return (
 		<div>
-			<textarea className="w-full h-64 p-2 border border-gray-300 rounded" placeholder="Enter entries here, one per line" onChange={(e) => { setRaw(e.target.value) }} value={raw}></textarea>
-			<button className="mt-2 px-4 py-2 bg-blue-500 text-white rounded" onClick={() => parseEntries(raw)}>Parse Entries</button>
+			<textarea className="w-full h-64 p-2 border border-gray-300 rounded text-black" placeholder="Enter entries here, one per line" onChange={(e) => { setRaw(e.target.value) }} value={raw}></textarea>
+			<button className="mt-2 px-4 py-2 bg-background-200 hover:bg-background-300 text-black rounded" onClick={() => parseEntries(raw)}>Parse Entries</button>
 		</div>
 	)
 }

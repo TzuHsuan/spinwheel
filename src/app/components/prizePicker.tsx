@@ -25,8 +25,8 @@ export const PrizePicker = ({ prizeList, index, setIndex }: { prizeList: prize[]
 
 
 	return (
-		<div className="w-full p-4">
-			<h2 className="text-2xl font-bold text-center mt-4">當前獎項</h2>
+		<div className="w-full pt-4">
+			<h2 className="text-2xl font-bold text-center ">當前獎項</h2>
 			<div className="flex flex-row h-16 w-1/4 mx-auto">
 				<button className={`h-full ${prizeList.length === 0 && 'disabled'}`} onClick={dec}><Image src='/chevron-left.svg' alt="previous prize" height={32} width={32}></Image></button>
 				<div className={` overflow-x-hidden w-full `}>
