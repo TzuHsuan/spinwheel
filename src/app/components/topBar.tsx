@@ -9,8 +9,8 @@ export const TopBar = () => {
 			<span className="text-lg font-bold">抽獎轉盤</span>
 		</div>
 		<nav className="space-x-4">
-			<Link href="/" className="hover:text-brand-300">Home</Link>
-			<Link href="/about" className="hover:text-brand-300">About</Link>
+			<Link href="/" className="hover:text-brand-300">主頁</Link>
+			<Link href="/about" className="hover:text-brand-300">關於</Link>
 		</nav>
 	</div>)
 }
