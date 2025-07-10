@@ -7,7 +7,7 @@ import type { entry } from "./entries";
 export const Roulette = ({ entries, isSpinning, done, duration, setWinner }: { entries: entry[], isSpinning: boolean, done: () => void, duration: number, setWinner: React.Dispatch<React.SetStateAction<string | null>> }) => {
 	const [rotation, setRotation] = useState(0);
 	const requestRef = React.useRef(0);
-	let startTime = useRef(0);
+	const startTime = useRef(0);
 	let maxSpeed = 0;
 	const [list, setList] = useState(['', '', '', '', ''])
 
