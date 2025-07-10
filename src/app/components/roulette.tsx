@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Chevron } from "@/app/components/chevron"
 
-import type { entry } from "@/app/page";
+import type { entry } from "./entries";
 
 
 export const Roulette = ({ entries, isSpinning, done, duration, setWinner }: { entries: entry[], isSpinning: boolean, done: () => void, duration: number, setWinner: React.Dispatch<React.SetStateAction<string | null>> }) => {

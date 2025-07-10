@@ -28,13 +28,13 @@ export const PrizePicker = ({ prizeList, index, setIndex }: { prizeList: prize[]
 		<div className="w-full pt-4">
 			<h2 className="text-2xl font-bold text-center ">當前獎項</h2>
 			<div className="flex flex-row h-16 w-1/4 mx-auto">
-				<button className={`h-full ${prizeList.length === 0 && 'disabled'}`} onClick={dec}><Image src='/spinwheel/chevron-left.svg' alt="previous prize" height={32} width={32}></Image></button>
+				<button className={`h-full cursor-pointer ${prizeList.length === 0 && 'disabled'}`} onClick={dec}><Image src='/spinwheel/chevron-left.svg' alt="previous prize" height={32} width={32}></Image></button>
 				<div className={` overflow-x-hidden w-full `}>
 					<div className={`w-full flex flex-row transition-transform carousel-items`} style={{ '--index': -index * 100 + '%' } as React.CSSProperties}>
 						{prizeList.length ? prizeNames : emptyList()}
 					</div>
 				</div>
-				<button className={`${prizeList.length === 0 && 'disabled'}`} onClick={inc}><Image src='/spinwheel/chevron-right.svg' alt="next prize" height={32} width={32}></Image></button>
+				<button className={`cursor-pointer  ${prizeList.length === 0 && 'disabled'}`} onClick={inc}><Image src='/spinwheel/chevron-right.svg' alt="next prize" height={32} width={32}></Image></button>
 			</div>
 		</div>
 	)

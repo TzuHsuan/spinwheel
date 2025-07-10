@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
+import type { entry } from "./entries";
 
-type entry = {
-	id: string, entries: number, name?: string
-}
 export const Participants = ({ participants }: { participants: entry[] }) => {
 	const [totalEntries, setTotalEntries] = useState(0)
 

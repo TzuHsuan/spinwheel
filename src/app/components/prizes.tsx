@@ -42,10 +42,13 @@ export const Prizes = ({ prizes, setPrizes, done }: { prizes: prize[], setPrizes
 		setRaw(text);
 	}, [prizes])
 
+	const placeholderText = `輸入獎品資料，每行一個獎品，格式為 名稱 數量 。例如：
+	鑰匙圈 5
+	杯墊 10`
 
 	return (
 		<div>
-			<textarea className="w-full h-64 p-2 border border-gray-300 rounded text-black" placeholder="Enter entries here, one per line" onChange={(e) => { setRaw(e.target.value) }} value={raw}></textarea>
+			<textarea className="w-full h-64 p-2 border border-gray-300 rounded text-black" placeholder={placeholderText} onChange={(e) => { setRaw(e.target.value) }} value={raw}></textarea>
 			<button className="mt-2 px-4 py-2 bg-background-200 hover:bg-background-300 text-black rounded" onClick={() => parsePrizes(raw)}>Parse Prizes</button>
 		</div>
 	)

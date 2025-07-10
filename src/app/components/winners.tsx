@@ -8,7 +8,7 @@ export type Winner = {
 
 export const Winners = ({ winners }: { winners: Winner[] }) => {
 	return (
-		<div className="w-full h-full p-4">
+		<div className="w-full h-full">
 			<table className="w-full table-auto border-collapse border border-gray-300 text-black">
 				<thead>
 					<tr className="bg-background-300">

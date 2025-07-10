@@ -11,9 +11,7 @@ import { Participants } from "./components/participants"
 import { Winners } from "./components/winners"
 import { Settings } from "./components/settings"
 
-export type entry = {
-  id: string, entries: number, name?: string
-}
+import type { entry } from "./components/entries"
 import type { prize } from "./components/prizes"
 import type { Winner } from "./components/winners"
 import type { SettingsType } from "./components/settings"
