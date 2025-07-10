@@ -64,7 +64,7 @@ export const Entries = ({ entries, setEntries, done }: { entries: entry[], setEn
 
 	useEffect(() => {
 		if (!entries || entries.length === 0) return setRaw('');
-		const text = entries.map((entry) => { return `${entry.id} ${entry.entries}}`.trim() }).join('\n');
+		const text = entries.map((entry) => { return `${entry.id} ${entry.entries}`.trim() }).join('\n');
 		console.log(text)
 		setRaw(text);
 	}, [entries])
