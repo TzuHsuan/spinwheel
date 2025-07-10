@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Chevron } from "@/app/components/chevron"
 
 import type { entry } from "./entries";
@@ -7,7 +7,7 @@ import type { entry } from "./entries";
 export const Roulette = ({ entries, isSpinning, done, duration, setWinner }: { entries: entry[], isSpinning: boolean, done: () => void, duration: number, setWinner: React.Dispatch<React.SetStateAction<string | null>> }) => {
 	const [rotation, setRotation] = useState(0);
 	const requestRef = React.useRef(0);
-	let startTime = 0;
+	let startTime = useRef(0);
 	let maxSpeed = 0;
 	const [list, setList] = useState(['', '', '', '', ''])
 
@@ -52,22 +52,22 @@ export const Roulette = ({ entries, isSpinning, done, duration, setWinner }: { e
 				return [newEnt, ...prev.slice(0, -1)]
 			});
 		}
-	}, [rotation, list])
+	}, [rotation, list, setList, newEntry])
 
 	useEffect(() => {
 		if (!isSpinning && requestRef.current !== 0) {
 			if (rotation > -8) setWinner(list[2])
 			else setWinner(list[1])
-			startTime = 0;
+			startTime.current = 0;
 		}
 	}, [isSpinning, requestRef.current])
 
 	const spin = (timestamp: number) => {
-		if (startTime === 0) {
-			startTime = timestamp;
+		if (startTime.current === 0) {
+			startTime.current = timestamp;
 			requestRef.current = requestAnimationFrame(spin);
 		} else {
-			const elapsed = timestamp - startTime;
+			const elapsed = timestamp - startTime.current;
 			if (elapsed > duration) {
 				done();
 				return
@@ -88,7 +88,7 @@ export const Roulette = ({ entries, isSpinning, done, duration, setWinner }: { e
 
 	useEffect(() => {
 		if (isSpinning) {
-			startTime = 0;
+			startTime.current = 0;
 			maxSpeed = 2 + Math.random() * duration / 10000; // Maximum speed of the wheel
 			requestRef.current = requestAnimationFrame(spin);
 		} else {
