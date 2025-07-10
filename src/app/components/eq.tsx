@@ -2,7 +2,7 @@ import { useRef, useEffect } from "react"
 
 const GRID_SPACING = 4
 const GRID_COLOR = "rgba(0,0,0,.4)"
-const FILL_COLOR = '#f50'
+const FILL_COLOR = 'oklch(32.48% 0.0542 202.36)'
 
 export const Visualizer = ({ trackPath, setDuration, isSpinning, volume }: { trackPath: string, setDuration: React.Dispatch<React.SetStateAction<number>>, isSpinning: boolean, volume: number }) => {
 
