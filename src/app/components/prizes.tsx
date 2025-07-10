@@ -49,7 +49,7 @@ export const Prizes = ({ prizes, setPrizes, done }: { prizes: prize[], setPrizes
 	return (
 		<div>
 			<textarea className="w-full h-64 p-2 border border-gray-300 rounded text-black" placeholder={placeholderText} onChange={(e) => { setRaw(e.target.value) }} value={raw}></textarea>
-			<button className="mt-2 px-4 py-2 bg-background-200 hover:bg-background-300 text-black rounded" onClick={() => parsePrizes(raw)}>Parse Prizes</button>
+			<button className="mt-2 px-4 py-2 bg-background-200 hover:bg-background-300 text-black rounded" onClick={() => parsePrizes(raw)}>匯入</button>
 		</div>
 	)
 }

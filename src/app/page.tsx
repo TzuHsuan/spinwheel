@@ -17,14 +17,14 @@ import type { Winner } from "./components/winners"
 import type { SettingsType } from "./components/settings"
 
 export default function Home() {
-  const basePath = 'spinwheel'
+  const basePath = '/spinwheel'
   const [trackIndex, setTrackIndex] = useState(0)
   const [trackList] = useState([
-    { title: "Yugioh", path: `/${basePath}/yugioh.mp3` },
-    { title: "Dog Song", path: `/${basePath}/Dogsong.mp3` },
-    { title: "Dummy", path: `/${basePath}/Dummy1.mp3` },
-    { title: "Nyeh Heh Heh!", path: `/${basePath}/Nyeh Heh Heh!.mp3` },
-    { title: "Spider Dance", path: `/${basePath}/Spider Dance.mp3` }
+    { title: "遊戲王", path: `${basePath}/yugioh.mp3` },
+    { title: "Dog Song - Undertale", path: `${basePath}/Dogsong.mp3` },
+    { title: "Dummy - Undertale", path: `${basePath}/Dummy1.mp3` },
+    { title: "Nyeh Heh Heh! - Undertale", path: `${basePath}/Nyeh Heh Heh!.mp3` },
+    { title: "Spider Dance - Undertale", path: `${basePath}/Spider Dance.mp3` }
   ])
   const [isSpinning, setIsSpinning] = useState(false)
   const [winner, setWinner] = useState<string | null>(null)
@@ -37,7 +37,7 @@ export default function Home() {
 
   const startSpin = () => {
     if (entries.length === 0 || prizes.length === 0) {
-      alert("Please add entries and prizes before spinning.");
+      alert("請先添加參與者和獎品");
       return;
     }
     setIsSpinning(true);
@@ -49,7 +49,7 @@ export default function Home() {
 
   useEffect(() => {
     if (winner) {
-      console.log(`${winner} won ${prizes[prizeIndex].id}`);
+      alert(`${winner} 贏得了 ${prizes[prizeIndex].id}`);
       setWinners(prev => [...prev, { id: winner, prize: prizes[prizeIndex].id }])
       setWinner(null)
       setEntries(prev => {
@@ -83,11 +83,11 @@ export default function Home() {
     }
   }, [trackList, trackIndex])
 
-  const blocks = [{ icon: `/${basePath}/icon/ticket.svg`, title: 'Entries', content: EntryInput, props: { entries, setEntries } },
-  { icon: `/${basePath}/icon/gift.svg`, title: 'Prizes', content: PrizeInput, props: { prizes, setPrizes } },
-  { icon: `/${basePath}/icon/user.svg`, title: 'Participants', content: Entriants, props: { entries } },
-  { icon: `/${basePath}/icon/trophy.svg`, title: 'Winners', content: WinnersTable, props: { winners } },
-  { icon: `/${basePath}/icon/settings.svg`, title: 'Settings', content: SettingsPanel, props: { settings, setSettings } },
+  const blocks = [{ icon: `${basePath}/icon/ticket.svg`, title: '抽獎券輸入', content: EntryInput, props: { entries, setEntries } },
+  { icon: `${basePath}/icon/gift.svg`, title: '獎品輸入', content: PrizeInput, props: { prizes, setPrizes } },
+  { icon: `${basePath}/icon/user.svg`, title: '參與者', content: Entriants, props: { entries } },
+  { icon: `${basePath}/icon/trophy.svg`, title: '得獎者', content: WinnersTable, props: { winners } },
+  { icon: `${basePath}/icon/settings.svg`, title: '設定', content: SettingsPanel, props: { settings, setSettings } },
   ]
 
   return (
@@ -96,7 +96,7 @@ export default function Home() {
       <PrizePicker prizeList={prizes} setIndex={setPrizeIndex} index={prizeIndex} />
       <Visualizer trackPath={trackList[trackIndex].path} setDuration={setDuration} isSpinning={isSpinning} volume={settings.volume} />
       <Roulette isSpinning={isSpinning} duration={duration} done={spinEnd} setWinner={setWinner} entries={entries} />
-      <button onClick={startSpin} disabled={isSpinning} className="mt-4 px-4 py-2 bg-background-200 hover:bg-background-300 cursor-pointer shadow text-black rounded">Start Spin</button>
+      <button onClick={startSpin} disabled={isSpinning} className="mt-4 px-4 py-2 bg-background-200 hover:bg-background-300 cursor-pointer shadow text-black rounded">抽獎</button>
       <Side blocks={blocks} />
     </div>
   );

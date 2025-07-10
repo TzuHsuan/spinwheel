@@ -12,8 +12,8 @@ export const Winners = ({ winners }: { winners: Winner[] }) => {
 			<table className="w-full table-auto border-collapse border border-gray-300 text-black">
 				<thead>
 					<tr className="bg-background-300">
-						<th className="border border-gray-300 px-4 py-2">ID</th>
-						<th className="border border-gray-300 px-4 py-2">Prize</th>
+						<th className="border border-gray-300 px-4 py-2">得獎人</th>
+						<th className="border border-gray-300 px-4 py-2">獎項</th>
 					</tr>
 				</thead>
 				<tbody>

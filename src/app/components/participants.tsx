@@ -13,9 +13,9 @@ export const Participants = ({ participants }: { participants: entry[] }) => {
 		<table className="w-full table-auto text-black border-collapse border border-gray-300">
 			<thead>
 				<tr className="bg-background-300">
-					<th className="border border-gray-300 px-4 py-2">ID</th>
-					<th className="border border-gray-300 px-4 py-2">Entries</th>
-					<th className="border border-gray-300 px-4 py-2">Chance</th>
+					<th className="border border-gray-300 px-4 py-2">抽獎人</th>
+					<th className="border border-gray-300 px-4 py-2">抽獎券數</th>
+					<th className="border border-gray-300 px-4 py-2">機率</th>
 				</tr>
 			</thead>
 			<tbody>

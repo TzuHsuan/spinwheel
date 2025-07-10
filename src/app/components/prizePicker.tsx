@@ -10,7 +10,7 @@ export const PrizePicker = ({ prizeList, index, setIndex }: { prizeList: prize[]
 	})
 
 
-	const emptyList = () => { return (<div className={`m-auto transition-opacity  min-w-full text-center`} >No Items Available</div>) }
+	const emptyList = () => { return (<div className={`m-auto transition-opacity  min-w-full text-center`} >尚未匯入獎品</div>) }
 
 	const dec = () => {
 		setIndex(i => {
